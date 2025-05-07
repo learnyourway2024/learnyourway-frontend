@@ -3,69 +3,38 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Learn Your Way - Teachers</title>
+  <title>Learn Your Way</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; background: #f0f4f8; }
+    h1, h2 { color: #333; }
+    section { margin-bottom: 30px; padding: 15px; background: #fff; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+    button { padding: 10px 20px; margin-top: 10px; background: #4CAF50; color: white; border: none; border-radius: 4px; cursor: pointer; }
+    button:hover { background: #45a049; }
+  </style>
 </head>
 <body>
-  <h1>Teachers Directory</h1>
 
-  <div>
-    <h2>Add a New Teacher</h2>
-    <form id="teacherForm">
-      <input type="text" id="name" placeholder="Name" required />
-      <input type="text" id="subject" placeholder="Subject" required />
-      <button type="submit">Add Teacher</button>
-    </form>
-  </div>
+  <h1>Welcome to Learn Your Way</h1>
 
-  <div>
-    <h2>List of Teachers</h2>
-    <ul id="teachersList"></ul>
-  </div>
+  <section>
+    <h2>Layer 1: Home-based and Expat Education</h2>
+    <p>Find and manage in-person tutors for children and families who travel frequently or homeschool abroad. Access teacher directories and schedule support.</p>
+    <a href="https://learnyourway-backend-1.onrender.com/api/teachers" target="_blank">
+      <button>View Teacher Directory (Beta)</button>
+    </a>
+  </section>
 
-  <script>
-    const API_URL = 'https://learnyourway-backend-1.onrender.com/api/teachers';
+  <section>
+    <h2>Layer 2: Higher Education Mentorship</h2>
+    <p>University professors and experts can donate 10% of their time to mentor students online in their specific field.</p>
+    <button onclick="alert('Mentor matching coming soon!')">Join as Mentor (Coming Soon)</button>
+  </section>
 
-    async function loadTeachers() {
-      try {
-        const res = await fetch(API_URL);
-        const teachers = await res.json();
-        const list = document.getElementById('teachersList');
-        list.innerHTML = '';
-        teachers.forEach(teacher => {
-          const li = document.createElement('li');
-          li.textContent = `${teacher.name} — ${teacher.subject}`;
-          list.appendChild(li);
-        });
-      } catch (err) {
-        console.error('Error loading teachers:', err);
-      }
-    }
+  <section>
+    <h2>Layer 3: AI Tutor for Personalized Learning</h2>
+    <p>Use our integrated AI companion to help guide students through academics, play, and emotional balance. Powered by ChatGPT for now.</p>
+    <button onclick="window.open('https://chat.openai.com/', '_blank')">Launch AI Tutor</button>
+  </section>
 
-    document.getElementById('teacherForm').addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const name = document.getElementById('name').value.trim();
-      const subject = document.getElementById('subject').value.trim();
-      if (!name || !subject) return;
-
-      try {
-        const res = await fetch(API_URL, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ name, subject })
-        });
-
-        if (!res.ok) {
-          throw new Error(`Failed to add teacher: ${res.status}`);
-        }
-
-        document.getElementById('teacherForm').reset();
-        loadTeachers();
-      } catch (err) {
-        console.error('Error adding teacher:', err);
-      }
-    });
-
-    loadTeachers();
-  </script>
 </body>
 </html>
