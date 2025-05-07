@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Learn Your Way - Teachers</title>
+</head>
+<body>
+  <h1>Teachers Directory</h1>
+
+  <div>
+    <h2>Add a New Teacher</h2>
+    <form id="teacherForm">
+      <input type="text" id="name" placeholder="Name" required />
+      <input type="text" id="subject" placeholder="Subject" required />
+      <button type="submit">Add Teacher</button>
+    </form>
+  </div>
+
+  <div>
+    <h2>List of Teachers</h2>
+    <ul id="teachersList"></ul>
+  </div>
+
+  <script>
+    const API_URL = 'https://learnyourway-backend-1.onrender.com/api/teachers';
+
+    async function loadTeachers() {
+      try {
+        const res = await fetch(API_URL);
+        const teachers = await res.json();
+        const list = document.getElementById('teachersList');
+        list.innerHTML = '';
+        teachers.forEach(teacher => {
+          const li = document.createElement('li');
+          li.textContent = `${teacher.name} — ${teacher.subject}`;
+          list.appendChild(li);
+        });
+      } catch (err) {
+        console.error('Error loading teachers:', err);
+      }
+    }
+
+    document.getElementById('teacherForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const name = document.getElementById('name').value.trim();
+      const subject = document.getElementById('subject').value.trim();
+      if (!name || !subject) return;
+
+      try {
+        const res = await fetch(API_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name, subject })
+        });
+
+        if (!res.ok) {
+          throw new Error(`Failed to add teacher: ${res.status}`);
+        }
+
+        document.getElementById('teacherForm').reset();
+        loadTeachers();
+      } catch (err) {
+        console.error('Error adding teacher:', err);
+      }
+    });
+
+    loadTeachers();
+  </script>
+</body>
+</html>
